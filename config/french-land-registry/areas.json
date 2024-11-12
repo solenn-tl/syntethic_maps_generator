@@ -1,0 +1,30 @@
+[
+    {
+        "CODE":"51",
+        "NAME":"Marne"
+    },
+    {
+        "CODE":"75",
+        "NAME":"Paris"
+    },
+    {
+        "CODE":"77",
+        "NAME":"Seine-et-Marne"
+    },
+    {
+        "CODE":"91",
+        "NAME":"Essonne"
+    },
+    {
+        "CODE":"92",
+        "NAME":"Hauts-de-Seine"
+    },
+    {
+        "CODE":"93",
+        "NAME":"Seine-Saint-Denis"
+    },
+    {
+        "CODE":"94",
+        "NAME":"Val-de-Marne"
+    }
+]
