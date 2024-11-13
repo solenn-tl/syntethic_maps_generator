@@ -1,12 +1,12 @@
 # TODO
 - [ ] Finaliser le README
-- [] Script de pré-traitement des données issues de la BDTOPO :
+- [ ] Script de pré-traitement des données issues de la BDTOPO :
     - Pour chaque département : 
         - [X] Dans la couche département, sélectionner l'entité avec le code insee correspondant
-        - [ ] Pour l'ensemble des couches associées (surface hydro, cours d'eau, lieu dit non nommé, tronçon de route), sélectionner les objets situées dans la géométrie du département et les exporter dans une nouvelle couche
+        - [X] Pour l'ensemble des couches associées (surface hydro, cours d'eau, lieu dit non nommé, tronçon de route), sélectionner les objets situées dans la géométrie du département et les exporter dans une nouvelle couche
         - [X] Fusionner les couches de même type des différents départements une seule
-        - [X] Ajouter les couches dans la base de données
-- [ ] Export des données synthétiques préparées pour la compétition
+        - [ ] Ajouter les couches dans la base de données
+- [ ] Export des données synthétiques préparées pour la compétition =>
 - [ ] Conversion dans le format de la compétition
 - [ ] Faire un dépôt des données géographiques prétraitées et utilisées pour la compétition
 - [ ] Définir la licence
