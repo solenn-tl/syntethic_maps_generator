@@ -11,21 +11,21 @@ This pipeline has been developed with data from the French National Mapping Agen
 
 ## 0. Setup
 * Create a Python virtual environment 
-* Run ``setup.sh``:
-    * Create the ``data`` and ``outputs`` folders.
-    * Install the libraries using ``requirements.txt``.
+* Run ```setup.sh```:
+    * Create the ```data``` and ```outputs``` folders.
+    * Install the libraries using ```requirements.txt```.
 * Check the environment variables: 
     * Windows: 
-* Open ``config/credentials.json`` and start customising it to suit your situation. You may need to update it with the database information.
-* Create a geographical database. In our case it is called "cadastre". To create the database, you can use the ``scripts/sql-postgis/0-InitDatabase.sql`` script, copied to the pgAdmin console, or run the ``scripts/python/0_prepare_db.py`` script. (! For this step, the database name is set in the ``scripts/sql-postgis/0-InitDatabase.sql`` script, it doesn't use the ``credentials.json`` parameters !)
-* Download and install the fonts listed in ``fonts``.
+* Open ```config/credentials.json``` and start customising it to suit your situation. You may need to update it with the database information.
+* Create a geographical database. In our case it is called "cadastre". To create the database, you can use the ```scripts/sql-postgis/0-InitDatabase.sql``` script, copied to the pgAdmin console, or run the ```scripts/python/0_prepare_db.py``` script. (! For this step, the database name is set in the ```scripts/sql-postgis/0-InitDatabase.sql``` script, it doesn't use the ```credentials.json``` parameters !)
+* Download and install the fonts listed in ```fonts```.
 * In QGIS, add connexion to your newly created database
 
 ## 1. Download data
 
 For the cadastral index maps, we have chosen to use geographical data that also appears in the 19th century maps.
-The downloaded data from each database (BDTOPO and PCI-EXPRES) must be unzipped into the appropriate folder in the ``data`` folder.
-The data is stored by department. You need to list the departments you want to use to generate the images at this stage. You can update the ``config/your-project-name/areas.json`` file with your list of areas.
+The downloaded data from each database (BDTOPO and PCI-EXPRES) must be unzipped into the appropriate folder in the ```data``` folder.
+The data is stored by department. You need to list the departments you want to use to generate the images at this stage. You can update the ```config/your-project-name/areas.json``` file with your list of areas.
 
 In our example we use the following French departements:
 * Marne (51)
@@ -58,34 +58,34 @@ After unzipping the download folder, we'll use the following files
 The layers *cours_d_eau.shp*, *surface_hydrographique.shp*, *lieu_dit_non_habité.shp* and *troncon_de_route.shp* contain a buffer of data from neighbouring départements. A processing step is performed to remove them (to avoid overlapping labels on the maps).
 
 ## 2. Loading data into DB
-* Run the ``python/1_create_styles_table.py`` script in the Python console:
+* Run the ```python/1_create_styles_table.py``` script in the Python console:
     - This will load the *style.csv* file into the database.
-* Use the ``python/2_load_layers_into_db.py`` script and set the *BASE* variable according to your situation. This script will :
+* Use the ```python/2_load_layers_into_db.py``` script and set the *BASE* variable according to your situation. This script will :
     - Load the shape of each selected department.
     - Load the PCI-EXPRESS data.
     - Load the data from BDTOPO into tables in the *bdtopo_tmp* schema. Features from the *department* SHP are added to a *department* layer of the public schema.
-* The data from BDTOPO in the *bdtopo_tmp* schema needs to be cut and merged. The script ``python-qgis/bdtopo_layers_concat`` will do the following for one type of layer (run in the Python console of QGIS).
+* The data from BDTOPO in the *bdtopo_tmp* schema needs to be cut and merged. The script ```python-qgis/bdtopo_layers_concat``` will do the following for one type of layer (run in the Python console of QGIS).
     - For each layer of each department (*cours_d_eau.shp*, *surface_hydrographique.shp*, *lieu_dit_non_habité.shp*, *troncon_de_route.shp*), the layer is cut using the department shape (to remove the data that is not in the treated department).
     - Each group of layers of the same type (e.g. *cours_d_eau.shp*) is merged.
     - The resulting layer is loaded into Postgis using the QGIS loader.
     - Finally, the resulting layer must be added to the database using the QGIS loader.
-* In PgAdmin run the script ```sql-postgis/1-SomeTreaments.sql`` to make some final pre-treaments on the layers.
+* In PgAdmin run the script ```sql-postgis/1-SomeTreaments.sql``` to make some final pre-treaments on the layers.
 
 ## 3. Create the images extent
-* Run ```sql-postgis/2-CreateZones.sql`` in the PgAdmin console to create 662x662 metre squares corresponding to 2000x2000 pixel images representing the geographical features at a scale of 1:1250:
-    - It creates 2 tables in the ``temporary`` schema of the database:
-        - ```zone_name`` (full grid over the extent of the area considered)
-        - ``zones``, which contains only the squares of the grid that are completely covered by the geometries of the ``feuille`` table.
-    - You can copy/paste additional squares from ```zone_name`` to ``zones`` using QGIS, depending on the areas you want in your dataset, accepting gaps between the features of the ``feuille`` table.
-* Run the script ```sql-postgis/3-AttributeAStyle.sql`` in the PgAdmin console: 
-    - It will attribute a style to each square of the grid using the ``styles/styles.csv`` file.
+* Run ```sql-postgis/2-CreateZones.sql``` in the PgAdmin console to create 662x662 metre squares corresponding to 2000x2000 pixel images representing the geographical features at a scale of 1:1250:
+    - It creates 2 tables in the ```temporary``` schema of the database:
+        - ```zone_name``` (full grid over the extent of the area considered)
+        - ```zones```, which contains only the squares of the grid that are completely covered by the geometries of the ```feuille``` table.
+    - You can copy/paste additional squares from ```zone_name``` to ```zones``` using QGIS, depending on the areas you want in your dataset, accepting gaps between the features of the ```feuille``` table.
+* Run the script ```sql-postgis/3-AttributeAStyle.sql``` in the PgAdmin console: 
+    - It will attribute a style to each square of the grid using the ```styles/styles.csv``` file.
 
 ## 4. Generate synthetic maps
 * Open QGIS. Open the Python console in QGIS.
-* Open the script ``python-qgis/open-layers.py`` in the QGIS Python console:
+* Open the script ```python-qgis/open-layers.py``` in the QGIS Python console:
     - This will load layers from the database into the project.
-* You can visualise the styles in QGIS using the script ``python-qgis/applystyle.py``.
-* Open the script ``python-qgis/crop.py`` in the QGIS Python console:
+* You can visualise the styles in QGIS using the script ```python-qgis/applystyle.py```.
+* Open the script ```python-qgis/crop.py``` in the QGIS Python console:
     - It will create the images and export the ground truth annotations in ```.gpkg``` and ```.csv``` format.
 
 ## 5. Export images metadata
