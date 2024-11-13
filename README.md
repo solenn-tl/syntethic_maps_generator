@@ -67,7 +67,7 @@ The layers *cours_d_eau.shp*, *surface_hydrographique.shp*, *lieu_dit_non_habit√
     - Each group of layers of the same type (ex : *cours_d_eau.shp*) is merged.
     - The resultant layer is pushed into the database using QGIS loader into Postgis.
     - Finally, you have to add the resultant layer into the database using QGIS loader.
-* In PgAdmin, excute the script ```sql-postgis/1-SomeTreaments.sql``` to make some pre-treaments.
+* In PgAdmin, execute the script ```sql-postgis/1-SomeTreaments.sql``` to make some final pre-treaments on the layers.
 
 ## 3. Create the images extent
 * Execute the ```sql-postgis/2-CreateZones.sql``` into PgAdmin console to generate squares of 662x662 meters that correspond to images of 2000x2000 pixels representing the geographical features at a scale of 1:1250 :
@@ -81,9 +81,14 @@ The layers *cours_d_eau.shp*, *surface_hydrographique.shp*, *lieu_dit_non_habit√
 ## 4. Generate synthetic maps
 * Open QGIS. In QGIS, open the Python console.
 * Open the script ```python-qgis/open-layers.py``` into the QGIS Python console:
-    * Run it. it will load layers from the database into the project.
+    - Run it. it will load layers from the database into the project.
 * You can visualize the styles on QGIS using the script ```python-qgis/applystyle.py```.
 * Open the ```python-qgis/crop.py``` script into QGIS Python console:
+    - It will create the images an export he ground-truth annotations in ```.gpkg``` and ```.csv``` format
+
+## 5. Export images metadata
+* The layer ```zones``` in the schema ```temporary``` of the database contains metadata about each images including their geographical coordinates, applied style and identifier (same as the name of the images).
+* It can be exported as a Geojson or a CSV using QGIS export tools.
 
 ## ICDAR 2025 competition
 
