@@ -92,6 +92,10 @@ The layers *cours_d_eau.shp*, *surface_hydrographique.shp*, *lieu_dit_non_habit√
 * The ```zones``` layer in the ```temporary``` schema of the database contains metadata about each image, including its geographic coordinates, its style applied, its name (*region_X_Y*) and its identifier (numer that is in the name of the image).
 * It can be exported as GeoJson or CSV using the QGIS export tools.
 
+## Notes
+* It is possible to have the same place named many times in the same image.
+* Due to QGIS rendering, some areas with high number of small plots can have overlapping text.
+
 ## ICDAR 2025 competition
 
 ## Citation
