@@ -12,6 +12,15 @@ BASE = "E:/codes/cadastre_synth_maps"
 table_to_treat = 'lieuditnonhabite'
 departements_codes = [51,75,77,91,92,93,94]
 
+# Layers configuration (MEMO to set table_to_treat value)
+layers = [
+    {"schema": "public", "table": "departement", "geom_name": "geom", "key": "id"},
+    {"schema": "bdtopo_tmp", "table": "surfacehydrographique", "geom_name": "geom", "key": "id"},
+    {"schema": "bdtopo_tmp", "table": "coursdeau", "geom_name": "geom", "key": "id"},
+    {"schema": "bdtopo_tmp", "table": "tronconderoute", "geom_name": "geom", "key": "id"},
+    {"schema": "bdtopo_tmp", "table": "lieuditnonhabite", "geom_name": "geom", "key": "id"},
+]
+
 # Open credentials file and set variables
 with open(BASE + '\config\credentials.json', encoding="utf-8") as f:
     credentials = json.load(f)
@@ -24,14 +33,6 @@ schema = credentials['DEFAULT_SCHEMA']
 target_crs = credentials['PROJECT_CRS']
 project = credentials['PROJECT_NAME']
 
-# Define the layers configuration
-layers = [
-    {"schema": "public", "table": "departement", "geom_name": "geom", "key": "id"},
-    {"schema": "bdtopo_tmp", "table": "surfacehydrographique", "geom_name": "geom", "key": "id"},
-    {"schema": "bdtopo_tmp", "table": "coursdeau", "geom_name": "geom", "key": "id"},
-    {"schema": "bdtopo_tmp", "table": "tronconderoute", "geom_name": "geom", "key": "id"},
-    {"schema": "bdtopo_tmp", "table": "lieuditnonhabite", "geom_name": "geom", "key": "id"},
-]
 
 # Define the PostGIS connection parameters
 postgis_connection = {
@@ -132,4 +133,4 @@ merged_layer = merged['OUTPUT']
 QgsProject.instance().addMapLayer(merged_layer)
 
 print("Merging complete.") 
-#♠You still have to add the layer "Fusionné" into the database by hand.
+#♠You still have to add the layer "Fusionné" into the database manually !!! 
