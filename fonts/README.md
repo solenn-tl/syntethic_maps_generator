@@ -1,3 +1,5 @@
+# Fonts
+
 Additionnal fonts have been download from <a href="https://fonts.google.com/">Google Fonts</a>.
 - Hurricane
 - Monsieur la Doulaise
