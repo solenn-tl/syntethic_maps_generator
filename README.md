@@ -18,6 +18,8 @@ This pipeline has been developped with data of the French National Mapping Agenc
     * Windows : 
 * Open the ```config/credentials.json``` and start to adapt it to your situation. You might have to update it with the database infos.
 * Create a geographical database. In our case, it is named "cadastre". To create the database, you can use the ```scripts/sql-postgis/0-InitDatabase.sql``` script, copied into pgAdmin console or execute the ```scripts/python/0_prepare_db.py``` script. (! For this step, the name of the database is set into ```scripts/sql-postgis/0-InitDatabase.sql``` script, it doesn't use the ```credentials.json``` parameters !)
+* Download and install the fonts listed in ```fonts```
+* In QGIS, add connexion to your newly created database
 
 ## 1. Download data
 
