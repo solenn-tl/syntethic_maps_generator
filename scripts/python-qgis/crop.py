@@ -373,7 +373,7 @@ if __name__ == "__console__":
     project_layers_names = [l.name() for l in QgsProject.instance().mapLayers().values()]
 
     for ix, region in enumerate(regions):
-        if ix > 200 and ix <= 500: #additionnal loop to make several runs to extract the entiere grid
+        if ix > 0 and ix <= 500: #additionnal loop to make several runs to extract the entiere grid
             center = region.geometry().centroid().asPoint()
             width = region.geometry().boundingBox().width()
             height = region.geometry().boundingBox().height()

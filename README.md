@@ -77,7 +77,7 @@ The layers *cours_d_eau.shp*, *surface_hydrographique.shp*, *lieu_dit_non_habit√
         - ```zones``` who contains only the squares of the grid that are completly covered by the geometries of the ```feuille``` table.
     - you can copy/paste additionnal squares from ```zone_name``` to ```zones``` using QGIS depending on the areas you want in your dataset, accepting gaps between the features of the ```feuille``` table.
 * Execute the script ```sql-postgis/3-AttributeAStyle.sql``` into PgAdmin console: 
-    - it will attribute a style to each square of the grid
+    - it will attribute a style to each square of the grid using the ```styles/styles.csv``` file.
 
 ## 4. Generate synthetic maps
 * Open QGIS. In QGIS, open the Python console.
