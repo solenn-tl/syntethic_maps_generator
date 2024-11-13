@@ -11,3 +11,4 @@
 - [ ] Faire un dépôt des données géographiques prétraitées et utilisées pour la compétition
 - [ ] Définir la licence
 - [ ] Citation
+- [ ] Infos sur la compétition ICDAR
