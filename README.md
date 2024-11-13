@@ -55,19 +55,18 @@ Once the download folder has been unzipped, we'll use the following files:
 
 The layers *cours_d_eau.shp*, *surface_hydrographique.shp*, *lieu_dit_non_habité.shp* and *troncon_de_route.shp* contains a buffer of data of neighboring departements. A treatement step to remove them will be performed (to avoid overlaping labels on the maps).
 
-**Faire un dépôt des données géographiques prétraitées et utilisées pour la compétition ?**
-
 ## 2. Loading data into DB
 * Execute the script ```python/1_create_styles_table.py``` in the Python console:
     - it will load the *style.csv* file into the database.
 * Use the ```python/2_load_layers_into_db.py``` script and set the *BASE* variable depending on your situation. This script will :
     - Load the shape of each selected departement.
     - Load the data from PCI-EXPRESS.
-* The data from BDTOPO are load into Postgres database using QGIS :
-    - For each layer of each departement (*cours_d_eau.shp*, *surface_hydrographique.shp*, *lieu_dit_non_habité.shp*, *troncon_de_route.shp*), we cut the layer using the departement shape do delete the data that are not in the treated departement.
+    - Load the data from BDTOPO into tables in the *bdtopo_tmp* schema. Features from *departement* SHP are added to a layer *departement* of the public schema.
+* The data from BDTOPO in *bdtopo_tmp* schema have to be cut and merged. The script ```python-qgis/bdtopo_layers_concat``` execute the following process for one kind of layer (executed in Python console of QGIS).
+    - For each layer of each departement (*cours_d_eau.shp*, *surface_hydrographique.shp*, *lieu_dit_non_habité.shp*, *troncon_de_route.shp*), the layer is cut using the departement shape (to delete the data that are not in the treated departement).
     - Each group of layers of the same type (ex : *cours_d_eau.shp*) is merged.
     - The resultant layer is pushed into the database using QGIS loader into Postgis.
-    - **Prévoir un script pour cette partie**
+    - Finally, you have to add the resultant layer into the database using QGIS loader.
 * In PgAdmin, excute the script ```sql-postgis/1-SomeTreaments.sql``` to make some pre-treaments.
 
 ## 3. Create the images extent

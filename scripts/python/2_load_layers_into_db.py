@@ -6,9 +6,12 @@ import psycopg2
 import time
 from tools import find_deep_folders_ign, file_exists
 
+#Variables you have to set
 BASE = "E:/codes/cadastre_synth_maps"
+RUN_BBTOPO = True
+RUN_PCI = True
 
-# Open credentials file and set variables
+# Open credentials file and set variables for the connection
 with open(BASE + '\config\credentials.json', encoding="utf-8") as f:
     credentials = json.load(f)
 
@@ -62,9 +65,6 @@ def insert_into_table_ogr2ogr_command(database_name, host, port, user, password,
 
 if __name__ == "__main__":
 
-    RUN_BBTOPO = True
-    RUN_PCI = False
-        
     # connect 
     conn = psycopg2.connect(user=user,
                             password=password,
@@ -97,7 +97,7 @@ if __name__ == "__main__":
         elif len(departement) == 3:
             departement_code = 'D' + departement
 
-        #Look for BD TOPO data
+        #Look for BD TOPO data : it will add the shapefiles in a tmp schema (one table = 1 shapefile named as the following table_name + departement_id)
         if RUN_BBTOPO:
             base_directory = BASE + '/data/BDTOPO'
             for elem in bdtopo:
@@ -106,69 +106,25 @@ if __name__ == "__main__":
                 shapefile_path = shapefile_path.replace('\\', '/')
                 file_exists(shapefile_path)
                 table_name = elem['TABLE_NAME']
-                target_table_name = schema + '.' + table_name
+                
 
                 print(f"Start processing {table_name} from {shapefile_path}")
                 if table_name == "departement" and counter == 0:
                     sql = " -where INSEE_DEP='" + departement + "'"
+                    target_table_name = schema + '.' + table_name
                     command = create_table_ogr2ogr_command(database_name, host, port, user, password, shapefile_path, target_table_name, target_crs,sql)
                     subprocess.run(command, shell=True)
                 elif table_name == "departement" and counter > 0:
                     sql = " -where INSEE_DEP='" + departement + "'"
+                    target_table_name = schema + '.' + table_name
                     command = insert_into_table_ogr2ogr_command(database_name, host, port, user, password, shapefile_path, target_table_name, target_crs,sql)
                     subprocess.run(command, shell=True)
-                elif table_name == "tronconderoute" and counter == 0:
-                    tmp_target_table_name = 'temporary' + '.' + table_name + '_' + departement
-                    tmp_tables.append(tmp_target_table_name)
-                    sql = ""
-                    command = create_table_ogr2ogr_command(database_name, host, port, user, password, shapefile_path, tmp_target_table_name, target_crs,sql)
-                    subprocess.run(command, shell=True)
-                elif table_name == "tronconderoute" and counter > 0:
-                    tmp_target_table_name = 'temporary' + '.' + table_name + '_' + departement
-                    tmp_tables.append(tmp_target_table_name)
-                    sql = ""
-                    command = create_table_ogr2ogr_command(database_name, host, port, user, password, shapefile_path, tmp_target_table_name, target_crs,sql)
-                    subprocess.run(command, shell=True)
-                elif (table_name == "tronconderoute" or table_name == "departement") and counter == 0:
-                    tmp_target_table_name = 'temporary' + '.' + table_name + '_' + departement
-                    tmp_tables.append(tmp_target_table_name)
-                    sql = ""
-                    command = create_table_ogr2ogr_command(database_name, host, port, user, password, shapefile_path, tmp_target_table_name, target_crs,sql)
-                    subprocess.run(command, shell=True)
-                    # Get the list of columns
-                    cur.execute(f"SELECT * FROM {tmp_target_table_name} LIMIT 0")
-                    column_names = ["t." + desc[0] for desc in cur.description if desc[0] != 'geom']
-                    column_names_ = ', '.join(column_names)
-                    # Cut the geometries to the departement boundaries
-                    cur.execute(f"""DROP TABLE IF EXISTS public.{elem['TABLE_NAME']};
-                        CREATE TABLE public.{elem['TABLE_NAME']} AS 
-                            SELECT {column_names_}, ST_Intersection(t.geom,ST_Buffer(d.geom,0.1))
-                            FROM departement AS d, temporary.{elem['TABLE_NAME']}_{departement} AS t
-                            WHERE d.insee_dep = '{departement}' AND ST_Intersects(t.geom, d.geom);
-                        --ALTER TABLE public.{elem['TABLE_NAME']} ADD COLUMN insee_dep character varying (3);
-                        --UPDATE public.{elem['TABLE_NAME']} SET insee_dep = '{departement}';""")
-                    conn.commit() 
                 else:
-                    tmp_target_table_name = 'temporary' + '.' + table_name + '_' + departement
-                    tmp_tables.append(tmp_target_table_name)
                     sql = ""
-                    command = insert_into_table_ogr2ogr_command(database_name, host, port, user, password, shapefile_path, tmp_target_table_name, target_crs,sql)
+                    schema = 'bdtopo_tmp'
+                    target_table_name = schema + '.' + table_name + '_' + str(departement)
+                    command = create_table_ogr2ogr_command(database_name, host, port, user, password, shapefile_path, target_table_name, target_crs,sql)
                     subprocess.run(command, shell=True)
-                    # Get the list of columns
-                    cur.execute(f"SELECT * FROM {tmp_target_table_name} LIMIT 0")
-                    column_names = ["t." + desc[0] for desc in cur.description if desc[0] != 'geom']
-                    column_names_ = ', '.join(column_names)
-                    # Cut the geometries to the departement boundaries
-                    cur.execute(f"""INSERT INTO public.{elem['TABLE_NAME']} AS 
-                            SELECT {column_names_}, ST_Intersection(t.geom,ST_Buffer(d.geom,0.1))
-                            FROM departement AS d, temporary.{elem['TABLE_NAME']}_{departement} AS t
-                            WHERE d.insee_dep = '{departement}' AND ST_Intersects(t.geom, d.geom);
-                            --UPDATE public.{elem['TABLE_NAME']} SET insee_dep = '{departement}';""")
-                    conn.commit() 
-        
-            #for tmp_table in tmp_tables:
-                #cur.execute(f"DROP TABLE IF EXISTS {tmp_table}")
-                #conn.commit()
 
         #Look for PCI-EXPRESS data
         if RUN_PCI:
@@ -190,11 +146,6 @@ if __name__ == "__main__":
                 subprocess.run(command, shell=True)
         counter += 1
 
-    #cur.execute(f"""/* Pre-treatment of plot numbers on localisant */
-            #CREATE INDEX IF NOT EXISTS numero_idx ON {schema}.localisant(numero);
-            #ALTER TABLE {schema}.localisant ADD COLUMN numero_court character varying(5);
-            #UPDATE {schema}.localisant SET numero_court = regexp_replace(numero, '(0*)([0-9]*)', '\2');
-            #CREATE INDEX numero_court_idx ON {schema}.localisant(numero_court); """)
     conn.commit() 
     conn.close()
     cur.close()

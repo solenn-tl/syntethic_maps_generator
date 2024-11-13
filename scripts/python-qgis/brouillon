@@ -1,0 +1,92 @@
+processing.run("native:mergevectorlayers", {'LAYERS':
+['memory://Point?crs=EPSG:2154&uid={d006c0a3-c33d-40e6-b557-0510b10c667f}',
+'memory://Point?crs=EPSG:2154&uid={bcb61707-ba42-47a2-a4c6-0b92b52185f6}',
+'memory://Point?crs=EPSG:2154&uid={85d260b9-e233-4011-a62c-b4d381791553}',
+'memory://Point?crs=EPSG:2154&uid={230edca2-d59b-46b7-bf69-0235010a6c0f}',
+'memory://Point?crs=EPSG:2154&uid={30a7d506-17eb-476f-a0cb-290cdfc9083b}',
+'memory://Point?crs=EPSG:2154&uid={f1132777-1ca7-4479-a348-1c6c9e73df9b}',
+'memory://Point?crs=EPSG:2154&uid={724fd83f-b75a-404c-b6eb-8fe528e5e15c}'],
+'CRS':QgsCoordinateReferenceSystem('EPSG:2154'),
+'OUTPUT':'TEMPORARY_OUTPUT'})
+
+
+['memory://Point?crs=EPSG:2154&uid={d006c0a3-c33d-40e6-b557-0510b10c667f}', 
+'memory://Point?crs=EPSG:2154&uid={bcb61707-ba42-47a2-a4c6-0b92b52185f6}', 
+'memory://Point?crs=EPSG:2154&uid={85d260b9-e233-4011-a62c-b4d381791553}', 
+'memory://Point?crs=EPSG:2154&uid={230edca2-d59b-46b7-bf69-0235010a6c0f}', 
+'memory://Point?crs=EPSG:2154&uid={30a7d506-17eb-476f-a0cb-290cdfc9083b}',
+'memory://Point?crs=EPSG:2154&uid={f1132777-1ca7-4479-a348-1c6c9e73df9b}', 
+'memory://Point?crs=EPSG:2154&uid={724fd83f-b75a-404c-b6eb-8fe528e5e15c}']
+
+
+processing.run("native:mergevectorlayers", 
+{'LAYERS':['postgres://dbname=\'cadastre\' host=localhost port=5436 user=\'postgres\' password=\'postgres\' key=\'id\' checkPrimaryKeyUnicity=\'1\' table="public"."departement" (geom)'],
+'CRS':QgsCoordinateReferenceSystem('EPSG:2154'),
+'OUTPUT':'postgres://dbname=\'cadastre\' host=localhost port=5436 sslmode=disable table="public"."lieuditnonhabite2" (geom)'})
+
+
+processing.run("gdal:importvectorintopostgisdatabaseavailableconnections", 
+{'DATABASE':'cadastre',
+'INPUT':'memory://Point?crs=EPSG:2154&field=id:integer(-1,0)&field=nature:string(-1,0)&field=toponyme:string(-1,0)&field=statut_top:string(-1,0)&field=importance:string(-1,0)&field=date_creat:string(-1,0)&field=date_maj:string(-1,0)&field=date_app:string(-1,0)&field=date_conf:string(-1,0)&field=source:string(-1,0)&field=id_source:string(-1,0)&field=acqu_plani:string(-1,0)&field=prec_plani:string(-1,0)&field=id_ban:string(-1,0)&field=layer:string(0,0)&field=path:string(0,0)&uid={21827898-9658-407c-961e-fdb697c06869}','SHAPE_ENCODING':'',
+'GTYPE':3,
+'A_SRS':"EPSG:2154",
+'T_SRS':None,
+'S_SRS':None,
+'SCHEMA':'public',
+'TABLE':'lieuditnonhabite2',
+'PK':'id',
+'PRIMARY_KEY':'',
+'GEOCOLUMN':'geom',
+'DIM':0,
+'SIMPLIFY':'',
+'SEGMENTIZE':'',
+'SPAT':None,
+'CLIP':False,
+'WHERE':'',
+'GT':'',
+'OVERWRITE':True,
+'APPEND':False,
+'ADDFIELDS':False,
+'LAUNDER':False,
+'INDEX':False,
+'SKIPFAILURES':False,
+'PROMOTETOMULTI':False,
+'PRECISION':True,
+'OPTIONS':''})
+
+
+{
+  "area_units": "m2",
+  "distance_units": "meters",
+  "ellipsoid": "EPSG:7019",
+  "inputs": {
+    "ADDFIELDS": false,
+    "APPEND": false,
+    "A_SRS": "EPSG:2154",
+    "CLIP": false,
+    "DATABASE": "cadastre",
+    "DIM": 0,
+    "GEOCOLUMN": "geom",
+    "GT": "",
+    "GTYPE": 3,
+    "INDEX": false,
+    "INPUT": "memory://Point?crs=EPSG:2154&field=id:integer(-1,0)&field=nature:string(-1,0)&field=toponyme:string(-1,0)&field=statut_top:string(-1,0)&field=importance:string(-1,0)&field=date_creat:string(-1,0)&field=date_maj:string(-1,0)&field=date_app:string(-1,0)&field=date_conf:string(-1,0)&field=source:string(-1,0)&field=id_source:string(-1,0)&field=acqu_plani:string(-1,0)&field=prec_plani:string(-1,0)&field=id_ban:string(-1,0)&field=layer:string(0,0)&field=path:string(0,0)&uid={21827898-9658-407c-961e-fdb697c06869}",
+    "LAUNDER": false,
+    "OPTIONS": "",
+    "OVERWRITE": true,
+    "PK": "id",
+    "PRECISION": true,
+    "PRIMARY_KEY": null,
+    "PROMOTETOMULTI": false,
+    "SCHEMA": "public",
+    "SEGMENTIZE": "",
+    "SHAPE_ENCODING": "",
+    "SIMPLIFY": "",
+    "SKIPFAILURES": false,
+    "SPAT": null,
+    "S_SRS": null,
+    "TABLE": "lieuditnonhabite2",
+    "T_SRS": null,
+    "WHERE": ""
+  }
+}
