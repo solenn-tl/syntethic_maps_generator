@@ -1,8 +1,8 @@
 # A synthetic cadastral index maps generator using real geographical data
 
-This repository contains a tool to generate images of annotated cadastral index maps maps. These images can be used to train a text recognition model on old cadastral index maps of comparable style.
+This repository contains a tool to generate images of cadastral index maps annotated from text detection, text recognition and text classification tasks. These images can be used to (pre)train a text recognition model on old cadastral index maps of comparable style.
 
-This pipeline has been developped with data of the French National Mapping Agency (IGN), using geographical features related to the French land registry. It as been designed to make it adaptable to other kind of maps nor data.
+This pipeline has been developped with data of the French National Mapping Agency (IGN), using geographical features of the French land registry and of topographic databases. It as been designed to make it adaptable to other kind of maps nor data.
 
 ## Requirements
 * Python (tested with Python 3.12.0)
