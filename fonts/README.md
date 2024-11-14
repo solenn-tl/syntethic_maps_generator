@@ -6,5 +6,7 @@ Additionnal fonts have been download from <a href="https://fonts.google.com/">Go
 - Mr de Haviland
 - Norican
 - Special Elite
+- Cedarville Cursive
+- Meddon
 
 They are used by the QGIS styles, to complete the default fonts of this software.

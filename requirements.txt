@@ -5,3 +5,5 @@ matplotlib
 shapely
 logging
 PyQt5
+sqlalchemy
+arrow
