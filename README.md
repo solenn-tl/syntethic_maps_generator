@@ -70,6 +70,7 @@ The layers *cours_d_eau.shp*, *surface_hydrographique.shp*, *lieu_dit_non_habit√
     - The resulting layer is loaded into Postgis using the QGIS loader.
     - Finally, the resulting layer must be added to the database using the QGIS loader.
 * In PgAdmin run the script ```sql-postgis/1-SomeTreaments.sql``` to make some final pre-treaments on the layers.
+* To set rotation of the labels of *localisant* ans *lieuditnonhabite*, execute the scripts ```python/3_rotation_localisant.py``` and ```python/4_rotation_lieuditnonhabite.py```
 
 ## 3. Create the images extent
 * Run ```sql-postgis/2-CreateZones.sql``` in the PgAdmin console to create 662x662 metre squares corresponding to 2000x2000 pixel images representing the geographical features at a scale of 1:1250:
