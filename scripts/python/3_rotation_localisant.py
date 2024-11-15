@@ -1,14 +1,12 @@
 import psycopg2
 import random
 import json
-import pandas as pd
-from sqlalchemy import create_engine
 
-# Variable you have to set
+#Variable you have to set
 BASE = "E:/codes/cadastre_synth_maps"
 
 # Open credentials file and set variables
-with open(BASE + '/config/credentials.json', encoding="utf-8") as f:
+with open(BASE + '\config\credentials.json', encoding="utf-8") as f:
     credentials = json.load(f)
 
 database_name = credentials['DB_NAME']
@@ -20,25 +18,32 @@ schema = credentials['DEFAULT_SCHEMA']
 target_crs = credentials['PROJECT_CRS']
 project = credentials['PROJECT_NAME']
 
-# Database connection string for SQLAlchemy
-conn_str = f"postgresql://{user}:{password}@{host}:{port}/{database_name}"
-engine = create_engine(conn_str)
-
-# Connection to psycopg2 for other operations
+# Connection parameters
 conn = psycopg2.connect(user=user,
                         password=password,
                         host=host,
                         port=port,
                         database=database_name)
+# Create a cursor object
 cur = conn.cursor()
 
 try:
-
-    # Determine the total number of rows in the table
-    cur.execute("SELECT COUNT(*), array_agg(id) FROM localisant;")
-    total_rows, ids = cur.fetchone()
-
-    # Calculate the number of rows for each rotation value based on the given percentages
+    # 1. Add the rotation column if it doesn't already exist
+    cur.execute("""
+        ALTER TABLE localisant
+        DROP COLUMN IF EXISTS rotation;
+    """)
+    cur.execute("""
+        ALTER TABLE localisant
+        ADD COLUMN rotation INTEGER;
+    """)
+    print("Column rotation has been added")
+    
+    # 2. Determine the total number of rows in the table
+    cur.execute("SELECT COUNT(*) FROM localisant;")
+    total_rows = cur.fetchone()[0]
+    
+    # 3. Calculate the number of rows for each rotation value based on the given percentages
     counts = {
         0: int(total_rows * 0.5),
         -5: int(total_rows * 0.1),
@@ -51,38 +56,33 @@ try:
         90: int(total_rows * 0.025)
     }
     
-    # Generate a list of rotation values based on the distribution
+    # 4. Generate a list of rotation values based on the distribution
     rotation_values = [val for val, count in counts.items() for _ in range(count)]
     
-    # Shuffle the list to randomize the order of updates
+    # 5. Shuffle the list to randomize the order of updates
     random.shuffle(rotation_values)
     
-    # Create a DataFrame to store ids and rotation values
-    df = pd.DataFrame({
-        'id': ids[:len(rotation_values)],  # Ensure no overflow if rows and rotation_values don't perfectly match
-        'rotation': rotation_values
-    })
-
-    df2 = pd.read_sql("SELECT * FROM localisant;", conn)
-
-    #Join df and df2 on attribut "id"
-    dfres = pd.merge(df2, df, on='id', how='left')
-
-    #Rename table localisant to localisant_old
-    cur.execute("ALTER TABLE localisant RENAME TO localisant_old;")
+    # 6. Update the rotation column in the table
+    cur.execute("SELECT id FROM localisant;")  # Assuming 'id' is the primary key
+    ids = [row[0] for row in cur.fetchall()]
     
-    # 7. Update the database in bulk
-    dfres.to_sql('localisant', con=engine, schema=schema, if_exists='replace', index=False)
+    # Use the ids to update each row's rotation value
+    for i, rotation in enumerate(rotation_values):
+        cur.execute("""
+            UPDATE localisant
+            SET rotation = %s
+            WHERE id = %s;
+        """, (rotation, ids[i]))
 
-    # Commit and clean up
+    # Commit the changes
     conn.commit()
-    
+
 except Exception as e:
     # Roll back any changes if something goes wrong
     conn.rollback()
     print(f"An error occurred: {e}")
 
 finally:
+    # Close the cursor and connection
     cur.close()
     conn.close()
-    engine.dispose()
