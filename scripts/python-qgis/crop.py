@@ -310,7 +310,7 @@ project_layers_names = [l.name() for l in QgsProject.instance().mapLayers().valu
 
 for ix, region in enumerate(regions,start=4501):
     print(ix)
-    if ix >= 4501 and ix < 5001:
+    if ix >= 4501 and ix < 5001: 
         center = region.geometry().centroid().asPoint()
         width = region.geometry().boundingBox().width()
         height = region.geometry().boundingBox().height()

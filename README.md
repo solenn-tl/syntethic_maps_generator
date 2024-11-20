@@ -88,7 +88,8 @@ The layers *cours_d_eau.shp*, *surface_hydrographique.shp*, *lieu_dit_non_habit√
     - This will load layers from the database into the project.
 * You can visualise the styles in QGIS using the script ```python-qgis/applystyle.py```.
 * Open the script ```python-qgis/crop.py``` in the QGIS Python console:
-    - It will create the images and export the ground truth annotations in ```.gpkg``` and ```.csv``` format.
+    - It will create the images and export the ground truth annotations ```.csv``` format.
+* Finally, use the script ```python/6_treat_crops.py``` to translate the annotations in image referential.
 
 ## 5. Export images metadata
 * The ```zones``` layer in the ```temporary``` schema of the database contains metadata about each image, including its geographic coordinates, its style applied, its name (*region_X_Y*) and its identifier (numer that is in the name of the image).
