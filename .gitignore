@@ -3,3 +3,4 @@ outputs/
 scripts/python/__pycache__/
 outputs.zip
 other/
+outputs_old/

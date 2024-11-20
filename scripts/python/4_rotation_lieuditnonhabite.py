@@ -65,9 +65,6 @@ try:
             WHERE id = %s;
         """, (rotation, ids[i]))
 
-    # Commit the changes
-    conn.commit()
-
 except Exception as e:
     # Roll back any changes if something goes wrong
     conn.rollback()

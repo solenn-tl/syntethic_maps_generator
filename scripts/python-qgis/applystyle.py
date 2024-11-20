@@ -4,7 +4,7 @@ from qgis.core import QgsProject
 BASE = "E:/codes/cadastre_synth_maps"
 
 # Define the directory where the QML files are located
-qml_directory = BASE + "/styles/" + "style5"
+qml_directory = BASE + "/styles/" + "style1"
 
 # Get the current project
 project = QgsProject.instance()
