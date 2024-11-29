@@ -7,5 +7,5 @@ ign_train.json
 images/
 regions_location.geojson
 regions_location.qmd
-gt.json
 maptext2025_synthetic_french_maps.zip
+gt.json
