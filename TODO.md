@@ -9,8 +9,8 @@
         - [ ] Ajouter les couches dans la base de données automatiquement
 - [ ] Joseph : parfois pour les éléments linéaires (cours d'eau ou routes), il arrive qu'il y ait 2 fois le texte, est-ce évitable ? Supprimer en post-traitement ?
 - [X] Intégrer un peu de rotation dans les numéros de parcelles pour permettre au réseau d'apprendre ces variations
-- [ ] Export des données synthétiques préparées pour la compétition
-- [ ] Conversion dans le format de la compétition
+- [X] Export des données synthétiques préparées pour la compétition
+- [X] Conversion dans le format de la compétition
 
 ## Doc
 - [ ] Finaliser le README

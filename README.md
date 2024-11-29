@@ -92,7 +92,7 @@ The layers *cours_d_eau.shp*, *surface_hydrographique.shp*, *lieu_dit_non_habit√
 * Finally, use the script ```python/6_treat_crops.py``` to translate the annotations in image referential.
 
 ## 5. Export images metadata
-* The ```zones``` layer in the ```temporary``` schema of the database contains metadata about each image, including its geographic coordinates, its style applied, its name (*region_X_Y*) and its identifier (numer that is in the name of the image).
+* The ```zones``` layer in the ```temporary``` schema of the database contains metadata about each image, including its geographic coordinates, its style applied, its name (*region_X_Y*) and its identifier (number that is in the name of the image).
 * It can be exported as GeoJson or CSV using the QGIS export tools.
 
 ## Notes

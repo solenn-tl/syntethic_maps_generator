@@ -1,6 +1,11 @@
 data/
 outputs/
 scripts/python/__pycache__/
-outputs.zip
 other/
-outputs_old/
+viz/
+ign_train.json
+images/
+regions_location.geojson
+regions_location.qmd
+gt.json
+maptext2025_synthetic_french_maps.zip

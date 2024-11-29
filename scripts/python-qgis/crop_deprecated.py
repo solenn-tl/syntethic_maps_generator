@@ -68,7 +68,7 @@ CLIP_OOB_TO_REGION = True
 DEBUG = True
 
 STYLES_ROOT = "E:/codes/cadastre_synth_maps/styles"
-OUTPUT_FOLDER = "E:/codes/cadastre_synth_maps/outputs"
+OUTPUT_FOLDER = "E:/codes/cadastre_synth_maps/outputs_3"
 
 class RegionExtractor:
     """
@@ -385,7 +385,7 @@ if __name__ == "__console__":
     project_layers_names = [l.name() for l in QgsProject.instance().mapLayers().values()]
 
     for ix, region in enumerate(regions):
-        if ix == 55:    
+        if ix <= 10:    
             center = region.geometry().centroid().asPoint()
             width = region.geometry().boundingBox().width()
             height = region.geometry().boundingBox().height()

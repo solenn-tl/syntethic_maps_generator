@@ -308,9 +308,9 @@ regions = sorted(regions, key=lambda feature: feature['id'], reverse=False)
 old_style = ""
 project_layers_names = [l.name() for l in QgsProject.instance().mapLayers().values()]
 
-for ix, region in enumerate(regions,start=4501):
-    print(ix)
-    if ix >= 4501 and ix < 5001: 
+for ix, region in enumerate(regions):
+    if ix >= 5000 and ix < 5005: 
+        print(ix)
         center = region.geometry().centroid().asPoint()
         width = region.geometry().boundingBox().width()
         height = region.geometry().boundingBox().height()
