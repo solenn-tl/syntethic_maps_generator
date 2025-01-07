@@ -23,6 +23,7 @@ for csv in csvs:
     img_annotations.append({
         "image_path": image_final_path,
         "groups": ""
+        #style
     })
     #Open the csv
     df = pd.read_csv(csv)
@@ -41,6 +42,8 @@ for csv in csvs:
             feature = {
                 "vertices": group["geometry"].iloc[i],
                 "text": str(group["label"].iloc[i]),
+                "illegible":str(False),
+                "truncated": str(group["truncated"].iloc[i]),
                 "type": type_
                 }
             group_lst.append(feature)
@@ -51,5 +54,5 @@ for csv in csvs:
     json_.append(img_annotations)
 
 #Save the json
-with open(OUTPUT + "/gt.json", "w") as f:
+with open(OUTPUT + "/gt_v2_500.json", "w") as f:
     json.dump(json_, f)

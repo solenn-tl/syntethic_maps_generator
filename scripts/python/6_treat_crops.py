@@ -2,6 +2,7 @@ import pandas as pd
 from shapely.wkt import loads, dumps
 from shapely.geometry import Polygon, box
 from shapely.ops import unary_union
+from shapely import *
 import geopandas as gpd
 import numpy as np
 from PIL import Image
@@ -78,10 +79,32 @@ for img in imgs:
         #Create the extent of the image usign origin_x, origin_y, pixel_size_x, pixel_size_y
         geoextent = box(origin_x, origin_y, origin_x + image_width * pixel_size_x, origin_y - image_height * pixel_size_y)
 
-        def truncate_polygon(geometry):
-            return geometry.intersection(geoextent)  # Truncate to the extent
+        #Init col for "truncated" value (True or False expected)
+        merged_df["truncated"] = False
+        merged_df["out_of_zone"] = False
+        def truncate_polygon(row):
+            geometry = row['geometry']
+            truncated = row['truncated']
+            out_of_zone = row['out_of_zone']
+            trunc_geom = geometry.intersection(geoextent)  # Truncate to the extent
+            if trunc_geom.is_empty:
+                out_of_zone = True
+                trunc_geom = geometry
+            else:
+                out_of_zone = False
+                if equals(trunc_geom,geometry):
+                    truncated = False
+                else:
+                    truncated = True
+            return pd.Series([trunc_geom, truncated, out_of_zone])
 
-        merged_df["geometry"] = merged_df["geometry"].apply(truncate_polygon)
+        merged_df[["geometry","truncated",'out_of_zone']] = merged_df.apply(truncate_polygon, axis=1)
+
+        #Remove features out of image extent
+        merged_df = merged_df[merged_df['out_of_zone'] == False]
+
+        #Remove 'out_of_zone' column
+        merged_df = merged_df.drop(columns=['out_of_zone'])
 
         #Create a geopackage
         gdf = gpd.GeoDataFrame(merged_df, geometry='geometry')
@@ -119,8 +142,3 @@ for img in imgs:
         merged_df = merged_df.astype(str)
         merged_df.to_csv(output_csv, index=False)
         print(output_csv)
-
-        #Resize images
-        img = Image.open(image_path)
-        img = img.resize((2000, 2000))
-        img.save(image_path)

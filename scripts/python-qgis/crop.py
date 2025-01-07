@@ -180,7 +180,8 @@ class RegionExtractor:
 
         features = []
         export = []
-
+        
+        #print(labels)
         for id, label in enumerate(labels):
         
             if prev is None:
@@ -309,7 +310,7 @@ old_style = ""
 project_layers_names = [l.name() for l in QgsProject.instance().mapLayers().values()]
 
 for ix, region in enumerate(regions):
-    if ix >= 5000 and ix < 5005: 
+    if ix >= 500 and ix < 1000: 
         print(ix)
         center = region.geometry().centroid().asPoint()
         width = region.geometry().boundingBox().width()
@@ -317,6 +318,7 @@ for ix, region in enumerate(regions):
         
         id_ = region['id']
         style = region['style']
+        print(style)
         style_folder = f'{STYLES_ROOT}/{style}/'
         if style != old_style:
             old_style = style

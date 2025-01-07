@@ -29,11 +29,11 @@ cur = conn.cursor()
 
 try:
     cur.execute("ALTER TABLE lieuditnonhabite RENAME TO lieuditnonhabite_points;")
-
+    
     conn.commit()
 
     cur.execute("""CREATE TABLE lieuditnonhabite AS 
-	                SELECT l.id, ST_MakeLine(ST_SetSRID(ST_Point(ST_X(geom),ST_Y(geom)),2154), ST_SetSRID(ST_Point(ST_X(geom)+115,ST_Y(geom)),2154)) AS geom, l.nature, 
+	                SELECT l.id, ST_MakeLine(ST_SetSRID(ST_Point(ST_X(geom),ST_Y(geom)),2154), ST_SetSRID(ST_Point(ST_X(geom)+150,ST_Y(geom)),2154)) AS geom, l.nature, 
 l.toponyme, l.statut_top, l.importance, l.date_creat, l.date_maj, l.date_app, l.date_conf, l.source, l.id_source, l.acqu_plani, l.prec_plani, l.id_ban, l.layer, l.path, l.rotation
 	                FROM lieuditnonhabite_points AS l""")
     conn.commit()

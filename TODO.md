@@ -12,6 +12,19 @@
 - [X] Export des données synthétiques préparées pour la compétition
 - [X] Conversion dans le format de la compétition
 
+## Bugs identifiés
+- Avec QGIS, pour les objets linéaires, l'étiquette d'un même objet peut être est répétée plusieurs fois (dépend des paramètres de styles). La distance entre deux répétitions doit être fixée par l'utilisateur.
+    - Il semble que QGIS ne génère les boites (annotations) que pour une vsualisation du label (pas pour toutes). Il faut paramétrer la distance minimale entre deux répétitions au delà de la longueur du plus long objet dans une même zone : 
+        - 1900m pour les cours d'eau => 2000m
+        - Désactiver la répétition pour les autres couches linéaires.
+- Avec un petit écran (style PC) (???), les images générées ont une dimension 3000x3000 pixels (pourquoi ???), alors qu'avec QGIS ouvert sur un écran les images ont bien une dimension de 2000*2000 pixels comme fixé dans le code.
+
+## Amélioration des données
+- Problème des rues à doubles voies qui créent des mots dupliqués...
+    - Faire une zone tampon (r=12) autour des tronçons de rues (largeur uniquement).
+    - Supprimer les objets avec un label vide
+    - Si les buffers se touches (intérieur) et même label.
+
 ## Doc
 - [ ] Finaliser le README
 - [ ] Faire un dépôt des données géographiques prétraitées et utilisées pour la compétition
