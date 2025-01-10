@@ -310,15 +310,15 @@ old_style = ""
 project_layers_names = [l.name() for l in QgsProject.instance().mapLayers().values()]
 
 for ix, region in enumerate(regions):
-    if ix >= 3000 and ix < 3500: 
-        print(ix)
+    if ix >= 18000 and ix < 18371: 
+        #print(ix)
         center = region.geometry().centroid().asPoint()
         width = region.geometry().boundingBox().width()
         height = region.geometry().boundingBox().height()
         
         id_ = region['id']
         style = region['style']
-        print(style)
+        #print(style)
         style_folder = f'{STYLES_ROOT}/{style}/'
         if style != old_style:
             old_style = style

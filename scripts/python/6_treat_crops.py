@@ -16,7 +16,7 @@ imgs = glob.glob(OUTPUT + "/*.jpg")
 #Sort using the number that is on the file name
 imgs = sorted(imgs, key=lambda x: int(x.split("_")[-1].replace(".jpg", "")))
 
-for img in imgs:
+for img in imgs[10000:]:#0 à 5000, 5000 à 10000
 
     # Paths
     image_path = img

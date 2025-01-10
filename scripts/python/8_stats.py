@@ -4,7 +4,7 @@ import plotly
 import json
 
 BASE = "E:/codes/cadastre_synth_maps"
-GT = BASE + "/gt.json"
+GT = BASE + "/gt_v2.json"
 
 #Open json
 with open(GT, "r") as f:
@@ -30,6 +30,13 @@ for group in groups:
     for word in group:
         words.append(word["text"])
 print(f"Number of words: {len(words)}")
+
+#Count number of words that have truncated=True
+truncated = []
+for group in groups:
+    for word in group:
+        truncated.append(word["truncated"])
+print(f"Number of words that have truncated=True: {len([word for group in groups for word in group if word['truncated'] == 'True'])}")
 
 #Number of words of each type
 types = []
@@ -99,3 +106,4 @@ for type_ in types:
     for q in quantiles:
         quantiles_values.append(num_words[int(len(num_words)*q)])
     print(f"Quantiles of words of type {type_}: {quantiles_values}")
+

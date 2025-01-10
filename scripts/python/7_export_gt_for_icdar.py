@@ -54,5 +54,5 @@ for csv in csvs:
     json_.append(img_annotations)
 
 #Save the json
-with open(OUTPUT + "/gt_v2_500.json", "w") as f:
+with open(BASE + "/gt_v2.json", "w") as f:
     json.dump(json_, f)
