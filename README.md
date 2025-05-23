@@ -1,5 +1,7 @@
 # A synthetic cadastral index maps generator using real geographical data
 
+Authors : Nathalie Abadie, Bertrand Duménieu, Solenn Tual
+
 This repository contains a tool to generate images of cadastral index maps annotated for text detection, text recognition and text classification tasks. These images can be used for pre-training.
 
 This pipeline has been developed with data from the French National Mapping Agency (IGN), using geographical features from the French land registry and topographic databases. It has been designed to be adaptable to other types of maps and data.
